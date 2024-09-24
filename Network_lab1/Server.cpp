@@ -3,10 +3,12 @@
 #include <unistd.h>
 #include <string>
 
+
 using namespace std;
 //
 struct Person
 {
+    int client_id;
     char name[25]; //имя
     int faculty;//факультет
     int informatica; //баллы инф
@@ -25,7 +27,7 @@ int main()
 //файл запросов клиентов
     string nameA = "answers.bin";
 //файл ответов сервера
-    cout<< "server is working"<< endl;
+    cout << "server is working"<< endl;
 // начальные установки
     fR.open(nameR, ios::binary);
 //открытие файла REQUEST
@@ -41,12 +43,14 @@ int main()
 // есть новые запросы от клиентов? как только fR.tellg() станет больше переходим к след.операции
         while (size_pred >= fR.tellg())
         {
-            sleep(100);
+            sleep(10);
             fR.seekg(0, ios::end);}
 // получен новый запрос
         fR.seekg(size_pred, ios::beg);
 //переход к началу полученного запроса
         fR.read((char*)&Student, sizeof(Student));
+        cout << "\033[3;97;102m Получены данные о студенте:     \033[0m";
+        cout << Student.client_id << endl;
 //считывание данных клиента
         size_pred = fR.tellg();
 // на конец обработанных данных
