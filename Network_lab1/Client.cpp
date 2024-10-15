@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
-
+#include <vector>
+#include <algorithm>
 // #TODO !! : to make ANSII symbols work + add some color, font and cursor : https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences ,https://en.wikipedia.org/wiki/ANSI_escape_code
 
 
@@ -16,7 +17,18 @@ struct Person
     int math; // баллы мат
     int russ;// баллы рус
 } Student;
+vector<int> ID;
 
+bool proverka(int client_id){
+        if (find(ID.begin(), ID.end(), client_id) != ID.end()) {
+            cout << "\033[31m Завершите работу на другом устройстве\033[0m\n";
+            return 0;
+        }
+        else{
+            ID.push_back(client_id);
+            return 1;
+        }
+}
 int main()
 {
     setlocale(LC_ALL, "rus");
@@ -29,14 +41,21 @@ int main()
     ifstream f_ANS;
     long pred_size;
     int answer;
+
     while (true)
     {
-        cout << "\033[3;32;103m Введите id-номер клиента: \033[0m\n";
-        cin >> client_id;
-        if (client_id == 27) {
-            cout << "\033[31m Завершение работы...\033[0m\n";
-            sleep(5);
-            break;
+        int temp;
+        cout << "\033[36m Если вы новый клиент - 0, если хотите использовать пред. id клиента - 1, выйти из системы-2 \033[0m";
+        cin >> temp;
+        switch (temp) {
+            case 0:
+                cout << "\033[3;32;103m Введите id-номер клиента: \033[0m\n";
+                cin >> client_id;
+                proverka(client_id);
+            case 1:
+                break;
+            case 2:
+                return 0;
         }
 // передача данных от клиента серверу
         cout <<"\033[36m Введите запрос: Фамилия студента   Номер направления  Баллы Информатика   Баллы математика    Баллы Русский язык  \033[0m"<<endl;
